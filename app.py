@@ -41,7 +41,7 @@ def main():
         image_path = './uploaded_image.jpg'
         image.save(image_path)
 
-    url = st.text_input('Hoặc nhập URL ảnh rắn:', 'https://example.com/snake_image.jpg')
+    url = st.text_input('Hoặc nhập URL ảnh rắn:', 'https://th.bing.com/th/id/OIP.KUwhBZXNmh5-4lfoQY-LSAHaEl?rs=1&pid=ImgDetMain')
     
     if url:
         urllib.request.urlretrieve(url, './url_image.jpg')
