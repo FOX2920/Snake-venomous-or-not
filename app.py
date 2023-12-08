@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
+import urllib.request
 from keras.models import load_model
 import h5py
 from keras.preprocessing import image
@@ -22,25 +23,35 @@ def preprocess_image(img_path):
     return img_array
 
 # Function to make predictions
-def predict(image_path):
-    img_array = preprocess_image(image_path)
+def predict(img_array):
     result = model.predict(img_array)
     return result
 
 # Streamlit app
 def main():
     st.title("Nhận Diện rắn độc Hay không độc ")
-    st.title("Nhập Ảnh")
 
-    uploaded_file = st.file_uploader("Chọn ảnh rắn...", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader("Chọn ảnh rắn hoặc nhập URL...", type=["jpg", "jpeg", "png"])
+    image_path = None
 
     if uploaded_file is not None:
         # Display the uploaded image
         image = Image.open(uploaded_file)
         st.image(image, caption="Ảnh đã chọn", use_column_width=True)
+        image_path = './uploaded_image.jpg'
+        image.save(image_path)
 
+    url = st.text_input('Hoặc nhập URL ảnh rắn:', 'https://example.com/snake_image.jpg')
+    
+    if url:
+        urllib.request.urlretrieve(url, './url_image.jpg')
+        st.image(url, caption="Ảnh từ URL", use_column_width=True)
+        image_path = './url_image.jpg'
+
+    if image_path is not None:
         # Make predictions
-        prediction = predict(uploaded_file)
+        img_array = preprocess_image(image_path)
+        prediction = predict(img_array)
 
         # Display the result
         if prediction[0][0] > 0.5:
