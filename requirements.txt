@@ -1,5 +1,6 @@
 streamlit
 Pillow
 numpy
+requests
 tensorflow
 h5py
